@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--**********************
+Use with caution!  This document brought to you by
+Lukasz Kokoszka.  
+-Do not distribute
+-Do not use without authorization
+-Do not claim it as your own
+-DO not modify without permission
+20150407	-->
+<html>
+<head>
+</head>
+<body>
+	<!--logo/image.  No canvas needed-->
+	<img id="dCanvas" src="PAjpeg.jpg" width="182px" height="75px" style="position: absolute; left:50px; top:70px;">
+	</img>
+	<!--font canvas layer-->
+	<canvas id="bCanvas" width="351" height="165" style="position: absolute; left:0px; top:0px;">
+	</canvas>
+	<!--DADA layer-->
+	<canvas id="aCanvas" width="351" height="165" style="position: absolute; left:0px; top:0px;">
+	</canvas>
+<script>
+	//get canvas sizes
+	var x = document.getElementById("aCanvas").width;
+	var y = document.getElementById("aCanvas").height;
+	//array of co-ordinates
+	var aArray=[];
+	//initialize both canvases
+	var ctx = document.getElementById("aCanvas").getContext("2d");
+	var ctxB = document.getElementById("bCanvas").getContext("2d");
+
+	//call in each function in order
+	aSquare();
+	rendText();
+	rendText();
+	rendText();
+	setCoordinates();
+	randomize();
+	var pos3=0;
+		alert("ready to start");	//little pause to make sure recording starts
+	setInterval(fadeOut,1);
+	fadeOut();
+
+//fill in the top canvas with blue squares
+	function aSquare(){
+		//make everything white(to cover up between blue squares)
+		ctx.globalAlpha = 1;
+		ctx.fillStyle = "#ffffff";
+		ctx.fillRect(0,0,x,y);
+		//IDK why this.  Something about concatenating hex colors.
+		var m = 0x15; //hex 21
+	 	ctx.fillStyle = "#b0b0"+m;
+	 	//pa-solutions blue
+	 	ctx.fillStyle = "#009ada";
+	 	for(var j=-15;j<y;j+=15){
+	 	for(var i=0;i<x;i+=9){
+	 		ctx.fillRect(i+.5,j+3.8,8.8,14.5);
+	 	}
+	 	}
+	 }
+//customize text on the signature block
+	function rendText(){
+		ctx.globalAlpha = 1;
+		ctxB.fillStyle = "#000000";
+	 	ctxB.font = "15px courier";
+	 	ctxB.fillText(" Lukasz Kokoszka | PLC-Technician",0,15);
+	 	ctxB.fillText(" Lukasz.Kokoszka@pa-ats.com",0,30);
+	 	ctxB.fillText(" Process Automation Solutions",0,45);
+	 	ctxB.fillText(" 3011 Dublin Cir., Bessemer, AL 35022",0,60);
+	 }
+//make an array of x,y co-ordinates to clear out one at a time
+	 function setCoordinates(){
+	 	var xTotal=x/9;
+	 	var yTotal=y/15;
+	 	var newx,newy;
+	 	for(var k=0;k<xTotal;k++){
+	 		for(var l=0;l<yTotal;l++){
+	 			newx = k*9;
+	 			newy = (((l-1)*15)+3.8);
+	 			aArray.push({anX:newx,anY:newy});
+	 		}
+	 	}
+	 }
+//randomize the x,y co-ordinates array
+	 function randomize(){
+	 	var temp;
+	 	var randNum;
+	 	var len=aArray.length;
+	 	for (var q=0;q<len-1;q++){
+	 		randNum = Math.floor((Math.random()*len)-1);
+	 		temp=aArray[q];
+	 		aArray[q]=aArray[randNum];
+	 		aArray[randNum]=temp;
+		}
+	 }
+//clear out top canvas one square at a time
+	 function fadeOut(){ 	
+ 		ctx.clearRect(aArray[pos3].anX,aArray[pos3].anY,9,15.5);
+ 		pos3++;
+	 }
+</script>
+</body>
+</html>
